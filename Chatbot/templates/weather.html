@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.freepik.com%2Fphotos%2Fsky&psig=AOvVaw3OcNR-NSgnUxvOZ7WFiQ48&ust=1708368538331000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCOCTofDGtYQDFQAAAAAdAAAAABAE'); /* Replace with the path to your sky image */
+            background-size: cover;
+            background-color: #add8e6; /* LightBlue */
+            color: #333; /* DarkSlateGray */
+            margin: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #4682b4; /* SteelBlue */
+        }
+        form {
+            margin: 20px 0;
+        }
+        label {
+            color: #4682b4;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+        }
+        button {
+            background-color: #87cefa; /* LightSkyBlue */
+            color: #333;
+            padding: 8px 16px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4682b4;
+        }
+        p {
+            color: #333;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff; /* White */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #add8e6; /* LightBlue */
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #87cefa; /* LightSkyBlue */
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Weather Information</h1>
+    
+    <form method="post">
+        <label for="city">Enter city:</label>
+        <input type="text" id="city" name="city" required>
+        <button type="submit">Get Weather</button>
+    </form>
+
+    {% if error_message %}
+        <p style="color: red;">{{ error_message }}</p>
+    {% else %}
+        {% if city %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Weather in {{ city }}</th>
+                        <th>Temperature (°C)</th>
+                        <th>Description</th>
+                        <th>Humidity (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ city }}</td>
+                        <td>{{ temperature }}</td>
+                        <td>{{ description }}</td>
+                        <td>{{ humidity }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

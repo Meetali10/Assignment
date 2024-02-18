@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+        }
+        h1 {
+            color: #007bff;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        select {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Expense Tracker</h1>
+
+    <form method="post" action="{{ url_for('expenses') }}">
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required>
+
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required>
+
+        <button type="submit">Add Expense</button>
+    </form>
+
+    <form>
+        <label for="month">Filter by Month:</label>
+        <select id="month" name="month">
+            <option value="">All</option>
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="02">March</option>
+            <option value="02">April</option>
+            <option value="02">May</option>
+            <option value="02">June</option>
+            <option value="02">July</option>
+            <option value="02">August</option>
+            <!-- Add options for other months -->
+        </select>
+
+        <label for="year">Filter by Year:</label>
+        <select id="year" name="year">
+            <option value="">All</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <!-- Add options for other years -->
+        </select>
+
+        <label for="categoryFilter">Filter by Category:</label>
+        <input type="text" id="categoryFilter" name="categoryFilter">
+
+        <button type="button" onclick="filterExpenses()">Filter</button>
+    </form>
+
+    <h2>Expenses:</h2>
+    <table id="expenseTable">
+        <thead>
+            <tr>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category, expenses in expenses_by_category.items() %}
+                {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense.amount }}</td>
+                        <td>{{ expense.category }}</td>
+                        <td>{{ expense.date }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function filterExpenses() {
+            var table = document.getElementById('expenseTable');
+            var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var date = row.getElementsByTagName('td')[2].textContent;
+                var expenseMonth = date.split('-')[1];
+                var expenseYear = date.split('-')[0];
+                var expenseCategory = row.getElementsByTagName('td')[1].textContent;
+
+                var monthFilter = (document.getElementById('month').value === '' || expenseMonth === document.getElementById('month').value);
+                var yearFilter = (document.getElementById('year').value === '' || expenseYear === document.getElementById('year').value);
+                var categoryFilter = (document.getElementById('categoryFilter').value === '' || expenseCategory === document.getElementById('categoryFilter').value);
+
+                row.style.display = (monthFilter && yearFilter && categoryFilter) ? '' : 'none';
+            }
+        }
+    </script>
+</body>
+</html>

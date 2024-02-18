@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5; /* Light Gray */
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .chat-container {
+            max-width: 500px;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .user-message {
+            text-align: right;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .bot-message {
+            text-align: left;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        #chat-form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #user-input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        #chat-display {
+            overflow-y: auto;
+            max-height: 200px;
+        }
+        .chatbot-logo {
+            width: 50px; /* Adjust the size as needed */
+            height: 50px; /* Adjust the size as needed */
+            margin-right: 20px;
+        }
+        .chatbot-heading {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <h2 class="chatbot-heading">Chatbot</h2>
+         
+            <div id="chat-display" class="mb-3"></div>
+            <form id="chat-form" onsubmit="sendMessage(); return false;">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="user-input" placeholder="Type your message...">
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function appendMessage(message, className) {
+            var chatDisplay = document.getElementById('chat-display');
+            var messageElement = document.createElement('div');
+            messageElement.className = className;
+            messageElement.textContent = message;
+            chatDisplay.appendChild(messageElement);
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            appendMessage(userInput, 'user-message');
+            document.getElementById('user-input').value = '';
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'user_input=' + encodeURIComponent(userInput),
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage(data.response, 'bot-message');
+            });
+        }
+    </script>
+</body>
+</html>
