@@ -81,5 +81,4 @@ def chat():
         traceback.print_exc()
         return jsonify({'response': 'An error occurred on the server.'}), 500
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
